@@ -3,47 +3,21 @@ html, body {
   padding: 0;
   height: 100%;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: #000; /* Black background for the page */
-}
-
-.start-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
 }
 
-.start-button {
-  padding: 20px 40px;
-  font-size: 24px;
-  border: none;
-  background-color: #39ff14; /* Neon green button */
-  color: black;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.start-button:hover {
-  background-color: #00ff00; /* Lighter neon green on hover */
-}
-
-.game-board-container {
-  position: relative;
+.app-container {
+  display: flex;
   width: 100vw;
   height: 100vh;
-  background-color: #000; /* Black background for the game board */
 }
 
 .game-board {
   display: grid;
   grid-template-columns: repeat(auto-fill, 10px); /* Adjusted to match the smaller cell size */
   grid-template-rows: repeat(auto-fill, 10px); /* Adjusted to match the smaller cell size */
-  width: 100vw;
-  height: 100vh;
+  flex-grow: 1; /* Take up remaining space */
 }
 
 .cell {
@@ -57,26 +31,28 @@ html, body {
   background-color: #39ff14; /* Neon green for alive cells */
 }
 
-.reset-button {
-  position: absolute;
-  top: 20px; /* Position it down slightly */
-  right: 20px; /* Position it right slightly */
-  font-size: 48px; /* Increased font size for better visibility */
-  cursor: pointer;
-  color: #39ff14; /* Neon green reset icon */
-  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
-  width: 60px; /* Set fixed width for a perfect circle */
-  height: 60px; /* Set fixed height for a perfect circle */
+.sidebar {
+  width: 100px; /* Fixed width for the sidebar */
+  background-color: #000; /* Black background */
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 50%; /* Make it a circle */
-  transition: all 0.3s ease; /* Smooth transitions for hover effects */
 }
 
-.reset-button:hover {
-  color: #00ff00; /* Lighter neon green on hover */
-  background-color: rgba(0, 0, 0, 1); /* Slightly darker background on hover */
-  transform: scale(1.2); /* Slight scaling effect on hover */
-  box-shadow: 0 0 15px #00ff00; /* Neon green glow effect */
+.sidebar-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #39ff14; /* Neon green color for the icons */
+  transition: transform 0.3s ease;
+}
+
+.sidebar-button:hover {
+  transform: scale(1.2); /* Scale on hover */
+}
+
+.sidebar-button svg {
+  font-size: 48px; /* Icon size */
+  color: #39ff14;
 }

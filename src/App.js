@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
-import RestartAltIcon from '@mui/icons-material/RestartAlt'; // Import Material UI restart icon
+import PlayArrowIcon from '@mui/icons-material/PlayArrow'; // Material UI start icon
+import RestartAltIcon from '@mui/icons-material/RestartAlt'; // Material UI reset icon
 
 // Utility to create an empty grid of a given size
 const createEmptyGrid = (rows, cols) => {
@@ -26,7 +27,7 @@ const GameOfLife = () => {
   useEffect(() => {
     const calculateSize = () => {
       const cellSize = 10; // Smaller cell size for a larger grid
-      const width = window.innerWidth;
+      const width = window.innerWidth - 100; // Subtract the sidebar width
       const height = window.innerHeight;
       setRows(Math.floor(height / cellSize));
       setCols(Math.floor(width / cellSize));
@@ -89,10 +90,10 @@ const GameOfLife = () => {
     }
   }, [updateGrid, isRunning]);
 
-  // Start the game when the Start button is clicked
+  // Start the game and initialize a random grid
   const handleStart = () => {
     setIsRunning(true);
-    setGrid(createRandomGrid(rows, cols)); // Start with a random grid
+    setGrid(createRandomGrid(rows, cols));
   };
 
   // Reset the game to a random grid and restart the game
@@ -105,30 +106,31 @@ const GameOfLife = () => {
   };
 
   return (
-    <div>
-      {!isRunning ? (
-        // Show start button when game is not running
-        <div className="start-container">
-          <button className="start-button" onClick={handleStart}>Start</button>
-        </div>
-      ) : (
-        // Game board and reset button
-        <div className="game-board-container">
-          <div className="reset-button" onClick={handleReset}>
-            <RestartAltIcon /> {/* Material UI reset icon */}
-          </div>
-          <div className="game-board">
-            {grid.map((row, rowIndex) =>
-              row.map((cell, colIndex) => (
-                <div
-                  key={`${rowIndex}-${colIndex}`}
-                  className={`cell ${cell ? 'alive' : ''}`}
-                />
-              ))
-            )}
-          </div>
-        </div>
-      )}
+    <div className="app-container">
+      {/* Game board */}
+      <div className="game-board">
+        {grid.map((row, rowIndex) =>
+          row.map((cell, colIndex) => (
+            <div
+              key={`${rowIndex}-${colIndex}`}
+              className={`cell ${cell ? 'alive' : ''}`}
+            />
+          ))
+        )}
+      </div>
+
+      {/* Sidebar */}
+      <div className="sidebar">
+        {!isRunning ? (
+          <button className="sidebar-button" onClick={handleStart}>
+            <PlayArrowIcon style={{ fontSize: 48 }} /> {/* Start icon */}
+          </button>
+        ) : (
+          <button className="sidebar-button" onClick={handleReset}>
+            <RestartAltIcon style={{ fontSize: 48 }} /> {/* Reset icon */}
+          </button>
+        )}
+      </div>
     </div>
   );
 };
