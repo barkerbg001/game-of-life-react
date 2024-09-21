@@ -2,6 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'; // Material UI start icon
 import RestartAltIcon from '@mui/icons-material/RestartAlt'; // Material UI reset icon
+import TimerIcon from '@mui/icons-material/Timer'; // Material UI generation icon
+import PeopleIcon from '@mui/icons-material/People'; // Material UI population icon
+import { Tooltip } from '@mui/material'; // Material UI Tooltip
 
 // Utility to create an empty grid of a given size
 const createEmptyGrid = (rows, cols) => {
@@ -134,11 +137,7 @@ const GameOfLife = () => {
 
       {/* Sidebar */}
       <div className="sidebar">
-        <div className="counters">
-          <p>Generation: {generation}</p>
-          <p>Population: {population}</p>
-        </div>
-
+        {/* Start/Reset buttons */}
         {!isRunning ? (
           <button className="sidebar-button" onClick={handleStart}>
             <PlayArrowIcon style={{ fontSize: 48 }} /> {/* Start icon */}
@@ -148,6 +147,22 @@ const GameOfLife = () => {
             <RestartAltIcon style={{ fontSize: 48 }} /> {/* Reset icon */}
           </button>
         )}
+
+        {/* Tooltip for generation counter */}
+        <Tooltip title="Generation" arrow>
+          <div className="counter">
+            <TimerIcon style={{ fontSize: 48, color: '#39ff14' }} />
+            <p>{generation}</p>
+          </div>
+        </Tooltip>
+
+        {/* Tooltip for population counter */}
+        <Tooltip title="Population" arrow>
+          <div className="counter">
+            <PeopleIcon style={{ fontSize: 48, color: '#39ff14' }} />
+            <p>{population}</p>
+          </div>
+        </Tooltip>
       </div>
     </div>
   );
