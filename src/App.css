@@ -3,24 +3,69 @@ html, body {
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000; /* Black background for the page */
+}
+
+.start-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.start-button {
+  padding: 20px 40px;
+  font-size: 24px;
+  border: none;
+  background-color: #39ff14; /* Neon green button */
+  color: black;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.start-button:hover {
+  background-color: #00ff00; /* Lighter neon green on hover */
+}
+
+.game-board-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000; /* Black background for the game board */
 }
 
 .game-board {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 20px);
-  grid-template-rows: repeat(auto-fill, 20px);
+  grid-template-columns: repeat(auto-fill, 10px); /* Adjusted to match the smaller cell size */
+  grid-template-rows: repeat(auto-fill, 10px); /* Adjusted to match the smaller cell size */
   width: 100vw;
   height: 100vh;
 }
 
 .cell {
-  width: 20px;
-  height: 20px;
-  border: 1px solid #ddd;
-  background-color: #fff;
+  width: 10px; /* Reduced size */
+  height: 10px; /* Reduced size */
+  border: 1px solid #39ff14; /* Neon green border for cells */
+  background-color: black; /* Default black background for dead cells */
 }
 
 .cell.alive {
-  background-color: #333;
+  background-color: #39ff14; /* Neon green for alive cells */
+}
+
+.reset-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 36px;
+  cursor: pointer;
+  color: #39ff14; /* Neon green reset icon */
+}
+
+.reset-button:hover {
+  color: #00ff00; /* Lighter neon green on hover */
 }

@@ -1,8 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
+import RestartAltIcon from '@mui/icons-material/RestartAlt'; // Import Material UI restart icon
 
-// Utility to create a 2D array of a given size
-const createGrid = (rows, cols) => {
+// Utility to create an empty grid of a given size
+const createEmptyGrid = (rows, cols) => {
+  return Array.from({ length: rows }, () =>
+    Array.from({ length: cols }, () => 0)
+  );
+};
+
+// Utility to create a random grid for resetting
+const createRandomGrid = (rows, cols) => {
   return Array.from({ length: rows }, () =>
     Array.from({ length: cols }, () => (Math.random() > 0.7 ? 1 : 0))
   );
@@ -12,11 +20,12 @@ const GameOfLife = () => {
   const [grid, setGrid] = useState([]);
   const [rows, setRows] = useState(0);
   const [cols, setCols] = useState(0);
+  const [isRunning, setIsRunning] = useState(false); // Track if the game is running
 
+  // Initialize the grid size based on the window size
   useEffect(() => {
-    // Set grid size based on window size
     const calculateSize = () => {
-      const cellSize = 20;
+      const cellSize = 10; // Smaller cell size for a larger grid
       const width = window.innerWidth;
       const height = window.innerHeight;
       setRows(Math.floor(height / cellSize));
@@ -29,24 +38,19 @@ const GameOfLife = () => {
     return () => window.removeEventListener('resize', calculateSize);
   }, []);
 
+  // Initialize the empty grid once rows and cols are set
   useEffect(() => {
-    // Initialize grid after the rows and cols are set
     if (rows && cols) {
-      setGrid(createGrid(rows, cols));
+      const emptyGrid = createEmptyGrid(rows, cols);
+      setGrid(emptyGrid);
     }
   }, [rows, cols]);
 
   // Memoize getNeighbors to avoid recreating it on every render
   const getNeighbors = useCallback((grid, x, y) => {
     const directions = [
-      [0, 1],
-      [1, 1],
-      [1, 0],
-      [1, -1],
-      [0, -1],
-      [-1, -1],
-      [-1, 0],
-      [-1, 1],
+      [0, 1], [1, 1], [1, 0], [1, -1],
+      [0, -1], [-1, -1], [-1, 0], [-1, 1],
     ];
 
     return directions.reduce((acc, [dx, dy]) => {
@@ -61,36 +65,69 @@ const GameOfLife = () => {
 
   // Memoize updateGrid and include getNeighbors in the dependency array
   const updateGrid = useCallback(() => {
-    const newGrid = grid.map((row, rowIndex) =>
-      row.map((cell, colIndex) => {
-        const liveNeighbors = getNeighbors(grid, rowIndex, colIndex);
-        if (cell === 1 && (liveNeighbors < 2 || liveNeighbors > 3)) {
-          return 0;
-        }
-        if (cell === 0 && liveNeighbors === 3) {
-          return 1;
-        }
-        return cell;
-      })
-    );
-    setGrid(newGrid);
-  }, [grid, getNeighbors]);
+    setGrid((oldGrid) => {
+      return oldGrid.map((row, rowIndex) =>
+        row.map((cell, colIndex) => {
+          const liveNeighbors = getNeighbors(oldGrid, rowIndex, colIndex);
+          if (cell === 1 && (liveNeighbors < 2 || liveNeighbors > 3)) {
+            return 0; // Cell dies
+          }
+          if (cell === 0 && liveNeighbors === 3) {
+            return 1; // Cell is born
+          }
+          return cell; // Cell survives
+        })
+      );
+    });
+  }, [getNeighbors]);
 
   // Use a timer to update the grid at intervals
   useEffect(() => {
-    const intervalId = setInterval(updateGrid, 100);
-    return () => clearInterval(intervalId);
-  }, [updateGrid]);
+    if (isRunning) {
+      const intervalId = setInterval(updateGrid, 100);
+      return () => clearInterval(intervalId);
+    }
+  }, [updateGrid, isRunning]);
+
+  // Start the game when the Start button is clicked
+  const handleStart = () => {
+    setIsRunning(true);
+    setGrid(createRandomGrid(rows, cols)); // Start with a random grid
+  };
+
+  // Reset the game to a random grid and restart the game
+  const handleReset = () => {
+    setIsRunning(false); // Temporarily stop the game
+    setTimeout(() => {
+      setGrid(createRandomGrid(rows, cols)); // Reset to a random grid
+      setIsRunning(true); // Restart the game
+    }, 100);
+  };
 
   return (
-    <div className="game-board">
-      {grid.map((row, rowIndex) =>
-        row.map((cell, colIndex) => (
-          <div
-            key={`${rowIndex}-${colIndex}`}
-            className={`cell ${cell ? 'alive' : ''}`}
-          />
-        ))
+    <div>
+      {!isRunning ? (
+        // Show start button when game is not running
+        <div className="start-container">
+          <button className="start-button" onClick={handleStart}>Start</button>
+        </div>
+      ) : (
+        // Game board and reset button
+        <div className="game-board-container">
+          <div className="reset-button" onClick={handleReset}>
+            <RestartAltIcon /> {/* Material UI reset icon */}
+          </div>
+          <div className="game-board">
+            {grid.map((row, rowIndex) =>
+              row.map((cell, colIndex) => (
+                <div
+                  key={`${rowIndex}-${colIndex}`}
+                  className={`cell ${cell ? 'alive' : ''}`}
+                />
+              ))
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
