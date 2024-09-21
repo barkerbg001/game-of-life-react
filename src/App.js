@@ -30,8 +30,8 @@ const GameOfLife = () => {
   const [isRunning, setIsRunning] = useState(false); // Track if the game is running
   const [generation, setGeneration] = useState(0);  // Track the number of generations
   const [population, setPopulation] = useState(0);  // Track the population (live cells)
-  const [speed, setSpeed] = useState(100); // Speed control for game update interval
-  const [speedTooltip, setSpeedTooltip] = useState("Current Speed: 100ms"); // Speed tooltip state
+  const [speed, setSpeed] = useState(500); // Speed control for game update interval
+  const [speedTooltip, setSpeedTooltip] = useState("Current Speed: 500ms"); // Speed tooltip state
 
   const minSpeed = 50; // Minimum speed (fastest)
 
@@ -142,7 +142,7 @@ const GameOfLife = () => {
   // Speed up the game by decreasing the interval and updating the tooltip
   const handleSpeedUp = () => {
     setSpeed((prevSpeed) => {
-      const newSpeed = Math.max(minSpeed, prevSpeed - 50); // Decrease speed, but not below minSpeed
+      const newSpeed = Math.max(minSpeed, prevSpeed - 50); // Decrease interval time, increasing speed
       setSpeedTooltip(`Current Speed: ${newSpeed}ms`); // Update the tooltip with the new speed
       return newSpeed;
     });
