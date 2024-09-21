@@ -15,7 +15,7 @@ const createEmptyGrid = (rows, cols) => {
   );
 };
 
-// Utility to create a random grid for resetting
+// Utility to create a random grid for spawning a population
 const createRandomGrid = (rows, cols) => {
   return Array.from({ length: rows }, () =>
     Array.from({ length: cols }, () => (Math.random() > 0.7 ? 1 : 0))
@@ -104,9 +104,13 @@ const GameOfLife = () => {
     }
   }, [updateGrid, isRunning]);
 
-  // Start or resume the game without resetting the grid
+  // Start the game or resume the game
   const handleStart = () => {
-    setIsRunning(true); // Resume the game without resetting the grid
+    if (population === 0) {
+      // If no population, generate a new random grid
+      setGrid(createRandomGrid(rows, cols));
+    }
+    setIsRunning(true); // Resume the game
   };
 
   // Pause the game (stop updating the grid)
