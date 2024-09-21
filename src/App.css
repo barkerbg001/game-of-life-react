@@ -59,13 +59,24 @@ html, body {
 
 .reset-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 36px;
+  top: 20px; /* Position it down slightly */
+  right: 20px; /* Position it right slightly */
+  font-size: 48px; /* Increased font size for better visibility */
   cursor: pointer;
   color: #39ff14; /* Neon green reset icon */
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+  width: 60px; /* Set fixed width for a perfect circle */
+  height: 60px; /* Set fixed height for a perfect circle */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%; /* Make it a circle */
+  transition: all 0.3s ease; /* Smooth transitions for hover effects */
 }
 
 .reset-button:hover {
   color: #00ff00; /* Lighter neon green on hover */
+  background-color: rgba(0, 0, 0, 1); /* Slightly darker background on hover */
+  transform: scale(1.2); /* Slight scaling effect on hover */
+  box-shadow: 0 0 15px #00ff00; /* Neon green glow effect */
 }
