@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow'; // Material UI start icon
+import PauseIcon from '@mui/icons-material/Pause'; // Material UI pause icon
+import StopIcon from '@mui/icons-material/Stop'; // Material UI stop icon
 import RestartAltIcon from '@mui/icons-material/RestartAlt'; // Material UI reset icon
 import TimerIcon from '@mui/icons-material/Timer'; // Material UI generation icon
 import PeopleIcon from '@mui/icons-material/People'; // Material UI population icon
@@ -102,23 +104,30 @@ const GameOfLife = () => {
     }
   }, [updateGrid, isRunning]);
 
-  // Start the game and initialize a random grid
+  // Start or resume the game without resetting the grid
   const handleStart = () => {
-    setIsRunning(true);
-    setGrid(createRandomGrid(rows, cols));
-    setGeneration(0); // Reset the generation count
-    setPopulation(0); // Reset the population count
+    setIsRunning(true); // Resume the game without resetting the grid
+  };
+
+  // Pause the game (stop updating the grid)
+  const handlePause = () => {
+    setIsRunning(false);
   };
 
   // Reset the game to a random grid and restart the game
   const handleReset = () => {
-    setIsRunning(false); // Temporarily stop the game
-    setTimeout(() => {
-      setGrid(createRandomGrid(rows, cols)); // Reset to a random grid
-      setGeneration(0); // Reset the generation count
-      setPopulation(0); // Reset the population count
-      setIsRunning(true); // Restart the game
-    }, 100);
+    setGrid(createRandomGrid(rows, cols)); // Reset to a random grid
+    setGeneration(0); // Reset the generation count
+    setPopulation(0); // Reset the population count
+    setIsRunning(true); // Automatically start after resetting
+  };
+
+  // Stop the game and reset everything to an empty grid
+  const handleStop = () => {
+    setIsRunning(false); // Stop the game
+    setGrid(createEmptyGrid(rows, cols)); // Reset to an empty grid
+    setGeneration(0); // Reset the generation count
+    setPopulation(0); // Reset the population count
   };
 
   return (
@@ -137,16 +146,22 @@ const GameOfLife = () => {
 
       {/* Sidebar */}
       <div className="sidebar">
-        {/* Start/Reset buttons */}
+        {/* Play, Pause, Stop, and Reset buttons */}
         {!isRunning ? (
           <button className="sidebar-button" onClick={handleStart}>
-            <PlayArrowIcon style={{ fontSize: 48 }} /> {/* Start icon */}
+            <PlayArrowIcon style={{ fontSize: 48 }} /> {/* Play icon */}
           </button>
         ) : (
-          <button className="sidebar-button" onClick={handleReset}>
-            <RestartAltIcon style={{ fontSize: 48 }} /> {/* Reset icon */}
+          <button className="sidebar-button" onClick={handlePause}>
+            <PauseIcon style={{ fontSize: 48 }} /> {/* Pause icon */}
           </button>
         )}
+        <button className="sidebar-button" onClick={handleStop}>
+          <StopIcon style={{ fontSize: 48 }} /> {/* Stop icon */}
+        </button>
+        <button className="sidebar-button" onClick={handleReset}>
+          <RestartAltIcon style={{ fontSize: 48 }} /> {/* Reset icon */}
+        </button>
 
         {/* Tooltip for generation counter */}
         <Tooltip title="Generation" arrow>
