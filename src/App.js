@@ -6,6 +6,7 @@ import StopIcon from '@mui/icons-material/Stop'; // Material UI stop icon
 import RestartAltIcon from '@mui/icons-material/RestartAlt'; // Material UI reset icon
 import TimerIcon from '@mui/icons-material/Timer'; // Material UI generation icon
 import PeopleIcon from '@mui/icons-material/People'; // Material UI population icon
+import FastForwardIcon from '@mui/icons-material/FastForward'; // Material UI speed up icon
 import { Tooltip } from '@mui/material'; // Material UI Tooltip
 
 // Utility to create an empty grid of a given size
@@ -29,6 +30,10 @@ const GameOfLife = () => {
   const [isRunning, setIsRunning] = useState(false); // Track if the game is running
   const [generation, setGeneration] = useState(0);  // Track the number of generations
   const [population, setPopulation] = useState(0);  // Track the population (live cells)
+  const [speed, setSpeed] = useState(100); // Speed control for game update interval
+  const [speedTooltip, setSpeedTooltip] = useState("Current Speed: 100ms"); // Speed tooltip state
+
+  const minSpeed = 50; // Minimum speed (fastest)
 
   // Initialize the grid size based on the window size
   useEffect(() => {
@@ -96,13 +101,13 @@ const GameOfLife = () => {
     });
   }, [getNeighbors]);
 
-  // Use a timer to update the grid at intervals
+  // Use a timer to update the grid at intervals, based on the speed value
   useEffect(() => {
     if (isRunning) {
-      const intervalId = setInterval(updateGrid, 100);
+      const intervalId = setInterval(updateGrid, speed); // Adjust interval based on speed
       return () => clearInterval(intervalId);
     }
-  }, [updateGrid, isRunning]);
+  }, [updateGrid, isRunning, speed]);
 
   // Start the game or resume the game
   const handleStart = () => {
@@ -132,6 +137,15 @@ const GameOfLife = () => {
     setGrid(createEmptyGrid(rows, cols)); // Reset to an empty grid
     setGeneration(0); // Reset the generation count
     setPopulation(0); // Reset the population count
+  };
+
+  // Speed up the game by decreasing the interval and updating the tooltip
+  const handleSpeedUp = () => {
+    setSpeed((prevSpeed) => {
+      const newSpeed = Math.max(minSpeed, prevSpeed - 50); // Decrease speed, but not below minSpeed
+      setSpeedTooltip(`Current Speed: ${newSpeed}ms`); // Update the tooltip with the new speed
+      return newSpeed;
+    });
   };
 
   return (
@@ -166,6 +180,13 @@ const GameOfLife = () => {
         <button className="sidebar-button" onClick={handleReset}>
           <RestartAltIcon style={{ fontSize: 48 }} /> {/* Reset icon */}
         </button>
+
+        {/* Speed up button with tooltip */}
+        <Tooltip title={speedTooltip} arrow>
+          <button className="sidebar-button" onClick={handleSpeedUp}>
+            <FastForwardIcon style={{ fontSize: 48 }} /> {/* Speed Up icon */}
+          </button>
+        </Tooltip>
 
         {/* Tooltip for generation counter */}
         <Tooltip title="Generation" arrow>
