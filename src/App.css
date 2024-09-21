@@ -56,3 +56,14 @@ html, body {
   font-size: 48px; /* Icon size */
   color: #39ff14;
 }
+
+.counters {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #39ff14; /* Neon green for text */
+}
+
+.counters p {
+  margin: 0;
+  font-size: 18px;
+}

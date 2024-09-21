@@ -22,6 +22,8 @@ const GameOfLife = () => {
   const [rows, setRows] = useState(0);
   const [cols, setCols] = useState(0);
   const [isRunning, setIsRunning] = useState(false); // Track if the game is running
+  const [generation, setGeneration] = useState(0);  // Track the number of generations
+  const [population, setPopulation] = useState(0);  // Track the population (live cells)
 
   // Initialize the grid size based on the window size
   useEffect(() => {
@@ -67,7 +69,7 @@ const GameOfLife = () => {
   // Memoize updateGrid and include getNeighbors in the dependency array
   const updateGrid = useCallback(() => {
     setGrid((oldGrid) => {
-      return oldGrid.map((row, rowIndex) =>
+      let newGrid = oldGrid.map((row, rowIndex) =>
         row.map((cell, colIndex) => {
           const liveNeighbors = getNeighbors(oldGrid, rowIndex, colIndex);
           if (cell === 1 && (liveNeighbors < 2 || liveNeighbors > 3)) {
@@ -79,6 +81,13 @@ const GameOfLife = () => {
           return cell; // Cell survives
         })
       );
+
+      // Update generation and population count
+      setGeneration((prev) => prev + 1); // Increment generation
+      const currentPopulation = newGrid.flat().reduce((acc, cell) => acc + cell, 0); // Count live cells
+      setPopulation(currentPopulation);
+
+      return newGrid;
     });
   }, [getNeighbors]);
 
@@ -94,6 +103,8 @@ const GameOfLife = () => {
   const handleStart = () => {
     setIsRunning(true);
     setGrid(createRandomGrid(rows, cols));
+    setGeneration(0); // Reset the generation count
+    setPopulation(0); // Reset the population count
   };
 
   // Reset the game to a random grid and restart the game
@@ -101,6 +112,8 @@ const GameOfLife = () => {
     setIsRunning(false); // Temporarily stop the game
     setTimeout(() => {
       setGrid(createRandomGrid(rows, cols)); // Reset to a random grid
+      setGeneration(0); // Reset the generation count
+      setPopulation(0); // Reset the population count
       setIsRunning(true); // Restart the game
     }, 100);
   };
@@ -121,6 +134,11 @@ const GameOfLife = () => {
 
       {/* Sidebar */}
       <div className="sidebar">
+        <div className="counters">
+          <p>Generation: {generation}</p>
+          <p>Population: {population}</p>
+        </div>
+
         {!isRunning ? (
           <button className="sidebar-button" onClick={handleStart}>
             <PlayArrowIcon style={{ fontSize: 48 }} /> {/* Start icon */}
