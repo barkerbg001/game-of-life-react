@@ -34,6 +34,7 @@ const GameOfLife = () => {
   const [speedTooltip, setSpeedTooltip] = useState("Current Speed: 500ms"); // Speed tooltip state
 
   const minSpeed = 50; // Minimum speed (fastest)
+  const maxSpeed = 1000; // Maximum speed (slowest)
 
   // Initialize the grid size based on the window size
   useEffect(() => {
@@ -139,12 +140,20 @@ const GameOfLife = () => {
     setPopulation(0); // Reset the population count
   };
 
-  // Speed up the game by decreasing the interval and updating the tooltip
+  // Speed up the game by decreasing the interval and updating the tooltip.
+  // If the speed hits the minimum, reset it back to the max speed.
   const handleSpeedUp = () => {
     setSpeed((prevSpeed) => {
-      const newSpeed = Math.max(minSpeed, prevSpeed - 50); // Decrease interval time, increasing speed
-      setSpeedTooltip(`Current Speed: ${newSpeed}ms`); // Update the tooltip with the new speed
-      return newSpeed;
+      if (prevSpeed === minSpeed) {
+        // Reset to the max speed
+        setSpeedTooltip(`Current Speed: ${maxSpeed}ms`);
+        return maxSpeed;
+      } else {
+        // Decrease the interval time, increasing speed
+        const newSpeed = Math.max(minSpeed, prevSpeed - 50);
+        setSpeedTooltip(`Current Speed: ${newSpeed}ms`);
+        return newSpeed;
+      }
     });
   };
 
