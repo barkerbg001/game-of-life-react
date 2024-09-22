@@ -157,6 +157,21 @@ const GameOfLife = () => {
     });
   };
 
+  // Handle cell click to manually toggle between alive and dead
+  const handleCellClick = (rowIndex, colIndex) => {
+    setGrid((oldGrid) => {
+      const newGrid = oldGrid.map((row, rIndex) =>
+        row.map((cell, cIndex) => {
+          if (rIndex === rowIndex && cIndex === colIndex) {
+            return cell ? 0 : 1; // Toggle between alive (1) and dead (0)
+          }
+          return cell;
+        })
+      );
+      return newGrid;
+    });
+  };
+
   return (
     <div className="app-container">
       {/* Game board */}
@@ -166,6 +181,7 @@ const GameOfLife = () => {
             <div
               key={`${rowIndex}-${colIndex}`}
               className={`cell ${cell ? 'alive' : ''}`}
+              onClick={() => handleCellClick(rowIndex, colIndex)} // Handle cell toggle on click
             />
           ))
         )}
