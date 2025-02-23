@@ -1,4 +1,4 @@
-# Game of Life - React Version
+# Game of Life - React Version 
 
 ## Description
 This project is a React implementation of Conway's **Game of Life** with a sleek, modern **black and neon green theme**. It features a dynamic grid that adapts to the size of the screen, as well as interactive controls such as a start button to begin the simulation and a reset button to restart it. The game is controlled via a sidebar containing Material UI icons for starting and resetting the game.
