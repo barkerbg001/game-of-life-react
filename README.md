@@ -1,4 +1,3 @@
-
 # Game of Life - React Version
 
 ## Description
